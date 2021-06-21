@@ -1,2 +1,31 @@
 version: "3.9"
 services:
+  mysql-server:
+    container_name: c_mysql-server
+    image: linuxserver/mariadb
+    environment:
+      - TZ=Europe/Brussels
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    volumes:
+      - /home/pi/ReMake-1---herkansingsopdracht---Focus-Python/LAMP_Stack/databases:/config
+  phpmyadmin:
+    depends_on:
+      - mysql-server
+    image: phpmyadmin
+    restart: always
+    ports:
+      -81:80
+    environment:
+      -PMA_ARBITRARY=1
+  php:
+    depends_on:
+      - mysql-server
+    build: /home/pi/ReMake-1---herkansingsopdracht---Focus-Python/LAMP_Stack/php
+    ports:
+      - 80:80
+    volumes:
+      - /home/pi/ReMake-1---herkansingsopdracht---Focus-Python/LAMP_Stack/website:/var/www/html
+      
